@@ -1,16 +1,23 @@
 var fs = require('fs');
+var rimraf = require('rimraf');
 
 exports.save = function(req, res) {
-  res.send('file saved successfully!');
   
   var fileUpload = function() {
     var self = this;
     var uniqId;
     
+    this.clean = function() {
+      rimraf.sync(this.getTargetPath(), function() {
+        console.log("clean tmp dir: " + this.getTargetPath());
+      });
+    }
+    
     this.saveFile = function() {
       console.log(req.files);
       fs.readFile(req.files.file.path, function(err, data) {
-        var newPath = self.getTargetPath() + req.files.file.originalName;
+        var newPath = self.getTargetPath() + req.files.file.originalname;
+        console.log("newPath: " + newPath);
         fs.writeFile(newPath, data, function (err) {
           console.log("Finished writing file..." + err);
         });
@@ -33,8 +40,12 @@ exports.save = function(req, res) {
     }
     
     this.run = function() {
+      // this.clean();
       this.makeUniqDir();
       this.saveFile();
+      
+      res.send({result: "ok",
+        message: "file saved successfully!"});
     }
   }
   

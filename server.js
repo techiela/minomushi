@@ -4,12 +4,13 @@
 
 var express = require('express');
 var multer  = require('multer');
+
 var app = express();
 
 // enable cookie
 app.use(express.cookieParser());
 // multipart-form-data parser
-app.use(multer({ dest: './uploads/'}));
+app.use(multer({ dest: '/tmp/uploads/'}));
 
 // rooting
 require('./router')({"app": app, "express": express});
