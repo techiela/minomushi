@@ -13,7 +13,7 @@
     }
   </style>
   <script>
-    function MinomushiController($scope) {
+    function MinomushiController($scope, $http) {
 
       $scope.isDownloadLinkShow = false;
       $scope.send = function send() {};
@@ -44,6 +44,12 @@
           });
         }
       }
+
+      $scope.download = function() {
+        $http.post("download", {}).success(function() {
+          console.log("download ok")
+        });
+      }
     }
   </script>
 </head>
@@ -68,6 +74,10 @@
       <div class="page-header">
         <h1>2. download from here.</h1>
       </div>
+      <div class="row">
+        <button ng-click="download()">download</button>
+      </div>
+
     </div>
 
   </div>
@@ -79,3 +89,4 @@
 </body>
 
 </html>
+=
