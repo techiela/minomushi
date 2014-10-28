@@ -14,9 +14,7 @@ exports.exec = function(req, res) {
     }
 
     this.getTargetPath = function() {
-      // TODO set a value from cookie
-      // var targetPath = "/tmp/" + req.cookies.uniqId + "/";
-      var targetPath = "/tmp/20141028/";
+      var targetPath = "/tmp/" + req.cookies.uniqId + "/";
       console.log("targetPath: " + targetPath);
       return targetPath;
     }

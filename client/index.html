@@ -92,11 +92,20 @@
 
   </div>
   <script src="/js/jquery.min.js"></script>
+  <script src="/js/jquery.cookie.js"></script>
+  <script src="/js/jquery.md5.js"></script>
   <script src="/js/bootstrap.min.js"></script>
   <script src="/js/angular.min.js"></script>
   <script src="/js/dropzone.js"></script>
-  <!--<script src="/js/dropzone.impl.js"></script>-->
+  <script>
+    $(function() {
+      if (!$.cookie("uniqId")) {
+        var plainText = window.performance.now() + ":" + Math.random() * 1000000;
+        console.log(plainText);
+        $.cookie("uniqId", $.md5(plainText));
+      }
+    });
+  </script>
 </body>
 
 </html>
-=
