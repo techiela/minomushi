@@ -3,6 +3,7 @@ var async = require("async");
 var glob = require("glob");
 var path = require("path");
 var archiver = require("archiver");
+var mime = require("mime");
 var gm = require('gm').subClass({
   imageMagick: true
 });
@@ -12,7 +13,6 @@ exports.exec = function(req, res) {
   var download = function() {
     var self = this;
     var uniqId;
-
 
     this.getTargetPath = function() {
       // TODO set a value from cookie
@@ -63,6 +63,7 @@ exports.exec = function(req, res) {
       output.on('close', function() {
         console.log(archive.pointer() + ' total bytes');
         console.log('archiver has been finalized and the output file descriptor has closed.');
+        self.put();
       });
 
       archive.on('error', function(err) {
@@ -73,21 +74,21 @@ exports.exec = function(req, res) {
       archive.bulk([{
         expand: true,
         cwd: self.getTargetPath() + "resize/",
-        src: ['**'],
-        dest: self.getTargetPath() + "result/"
+        src: ["**"],
+        dest: ""
       }]);
       archive.finalize();
+    }
+
+    this.put = function() {
+      console.log("put")
+      res.download(self.getTargetPath() + "result/result.zip");
     }
 
     this.run = function() {
       // this.clean();
       this.makeUniqDir();
       this.convert();
-
-      res.send({
-        result: "ok",
-        message: "file saved successfully!"
-      });
     }
   }
 
