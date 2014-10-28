@@ -1,54 +1,95 @@
 var fs = require('fs');
-var rimraf = require('rimraf');
+var async = require("async");
+var glob = require("glob");
+var path = require("path");
+var archiver = require("archiver");
+var gm = require('gm').subClass({
+  imageMagick: true
+});
 
-exports.save = function(req, res) {
-  
-  var fileUpload = function() {
+exports.exec = function(req, res) {
+
+  var download = function() {
     var self = this;
     var uniqId;
-    
-    this.clean = function() {
-      rimraf.sync(this.getTargetPath(), function() {
-        console.log("clean tmp dir: " + this.getTargetPath());
+
+
+    this.getTargetPath = function() {
+      // TODO set a value from cookie
+      // var targetPath = "/tmp/" + req.cookies.uniqId + "/";
+      var targetPath = "/tmp/20141028/";
+      return targetPath;
+    }
+
+    this.makeUniqDir = function() {
+      var dirList = ["xhdpi", "hdpi", "mdpi"];
+      dirList.forEach(function(i) {
+        var targetPath = self.getTargetPath() + "resize/" + i;
+        if (!fs.existsSync(targetPath)) {
+          fs.mkdirSync(targetPath);
+        }
       });
     }
-    
-    this.saveFile = function() {
-      console.log(req.files);
-      fs.readFile(req.files.file.path, function(err, data) {
-        var newPath = self.getTargetPath() + req.files.file.originalname;
-        console.log("newPath: " + newPath);
-        fs.writeFile(newPath, data, function (err) {
-          console.log("Finished writing file..." + err);
+
+    this.convert = function() {
+      glob(self.getTargetPath() + "upload/*.*", function(err, files) {
+        async.forEachSeries(files, function(item, callback) {
+          console.log("item: " + item);
+          gm(item).size(function(err, value) {
+            console.log("width: " + value.width);
+            console.log("height: " + value.height);
+            fs.createReadStream(item).pipe(fs.createWriteStream(self.getTargetPath() + "resize/xhdpi/" + path.basename(item)));
+            gm(item).resize(value.width / 1.33, value.height / 1.33)
+              .write(self.getTargetPath() + "resize/hdpi/" + path.basename(item), function() {
+                console.log("save hdpi")
+                gm(item).resize(value.width / 2, value.height / 2)
+                  .write(self.getTargetPath() + "resize/mdpi/" + path.basename(item), function() {
+                    console.log("save mdpi")
+                    callback();
+                  });
+              });
+          });
+        }, function(err) {
+          console.log("finish all.");
+          self.archive();
         });
       });
     }
-    
-    this.getTargetPath = function () {
-      // TODO set a value from cookie
-      // var targetPath = "/tmp/" + req.cookies.uniqId + "/";
-      var targetPath = "/tmp/20141027/";
-      console.log("targetPath: " + targetPath);
-      return targetPath;
+
+    this.archive = function() {
+      var output = fs.createWriteStream(self.getTargetPath() + "result/result.zip");
+      var archive = archiver('zip');
+
+      output.on('close', function() {
+        console.log(archive.pointer() + ' total bytes');
+        console.log('archiver has been finalized and the output file descriptor has closed.');
+      });
+
+      archive.on('error', function(err) {
+        throw err;
+      });
+
+      archive.pipe(output);
+      archive.bulk([{
+        expand: true,
+        cwd: self.getTargetPath() + "resize/",
+        src: ['**'],
+        dest: self.getTargetPath() + "result/"
+      }]);
+      archive.finalize();
     }
-    
-    this.makeUniqDir = function() {
-      if (fs.existsSync(this.getTargetPath())) {
-        return;
-      }
-      fs.mkdirSync(this.getTargetPath());
-    }
-    
+
     this.run = function() {
       // this.clean();
       this.makeUniqDir();
-      this.saveFile();
-      
-      res.send({result: "ok",
-        message: "file saved successfully!"});
+      this.convert();
+
+      res.send({
+        result: "ok",
+        message: "file saved successfully!"
+      });
     }
   }
-  
-  new fileUpload().run();
-}
 
+  new download().run();
+}

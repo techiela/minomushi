@@ -1,7 +1,7 @@
 var fs = require('fs');
 var rimraf = require('rimraf');
 
-exports.save = function(req, res) {
+exports.exec = function(req, res) {
 
   var upload = function() {
     var self = this;
