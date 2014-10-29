@@ -23,7 +23,7 @@ exports.exec = function(req, res) {
       if (!fs.existsSync(this.getTargetPath())) {
         fs.mkdirSync(this.getTargetPath());
       }
-      var dirList = ["upload", "resize", "result"];
+      var dirList = ["upload", "result"];
       dirList.forEach(function(i) {
         var targetPath = self.getTargetPath() + i;
         if (!fs.existsSync(targetPath)) {

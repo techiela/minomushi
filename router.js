@@ -10,5 +10,5 @@ module.exports = function(o) {
   o.app.use(o.express.static(path.resolve(__dirname, 'client')));
 
   o.app.post('/upload', controller.upload.exec);
-  o.app.get('/download', controller.download.exec);
+  o.app.get('/download/:target', controller.download.exec);
 }

@@ -70,42 +70,55 @@
       <form action="/upload" class="dropzone" id="my-awesome-dropzone"></form>
     </div>
 
-    <div id="downloadFromHere" ng-show="isDownloadLinkShow">
+    <div id="downloadFromHere" ng-show="isDownloadLinkShow" style="display: none;">
       <div class="page-header">
-        <h1>2. download from here.</h1>
+        <h1>2. Download from here.</h1>
       </div>
       <div class="row">
         <div class="hero-button text-center">
-          <a href="/download" class="btn btn-large btn-success">
+          <a href="/download/iphone" class="btn btn-large btn-success">
             <i class="icon-arrow-down icon-white"></i>
             download for iPhone
           </a>
           &nbsp;&nbsp;
-          <a href="/download" class="btn btn-large btn-success">
+          <a href="/download/android" class="btn btn-large btn-success">
             <i class="icon-arrow-down icon-white"></i>
             download for Android
           </a>
         </div>
       </div>
 
-    </div>
+      <div id="delete" ng-show="isDeleteLinkShow" style="display: none;">
+        <div class="page-header">
+          <h1>3. Delete your images immediately?</h1>
+        </div>
+        <div class="row">
+          <div class="hero-button text-center">
+            <a href="/delete" class="btn btn-large btn-success">
+              <i class="icon-arrow-down icon-white"></i>
+              delete uploaded images
+            </a>
+          </div>
+        </div>
 
-  </div>
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/jquery.cookie.js"></script>
-  <script src="/js/jquery.md5.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/angular.min.js"></script>
-  <script src="/js/dropzone.js"></script>
-  <script>
-    $(function() {
-      if (!$.cookie("uniqId")) {
-        var plainText = window.performance.now() + ":" + Math.random() * 1000000;
-        console.log(plainText);
-        $.cookie("uniqId", $.md5(plainText));
-      }
-    });
-  </script>
+      </div>
+
+    </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
+    <script src="/js/jquery.md5.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/dropzone.js"></script>
+    <script>
+      $(function() {
+        if (!$.cookie("uniqId")) {
+          var plainText = window.performance.now() + ":" + Math.random() * 1000000;
+          console.log(plainText);
+          $.cookie("uniqId", $.md5(plainText));
+        }
+      });
+    </script>
 </body>
 
 </html>
