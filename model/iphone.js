@@ -8,9 +8,8 @@ var gm = require('gm').subClass({
   imageMagick: true
 });
 var mkdirp = require('mkdirp');
+var util = require("util");
 
-var KIND = "iphone";
-var RESOLUTION_LIST = ["xhdpi", "hdpi", "mdpi"];
 var RATE_FOR_2X = 0.667;
 var RATE_FOR_1X = 0.334;
 
@@ -21,19 +20,12 @@ exports.create = function(args) {
 
     var self = this;
     var req = args.req;
-    // TODO util.format
-    var resizeDir = "/tmp/" + req.cookies.uniqId + "/" + KIND + "/resize/";
+    var resizeDir = util.format("/tmp/%s/%s/resize/", req.cookies.uniqId, path.basename(__filename));
 
     this.makeWorkDir = function() {
       if (!fs.existsSync(resizeDir)) {
         mkdirp.sync(resizeDir);
       }
-      RESOLUTION_LIST.forEach(function(i) {
-        var targetPath = resizeDir + i;
-        if (!fs.existsSync(targetPath)) {
-          fs.mkdirSync(targetPath);
-        }
-      });
     }
 
     this.convert = function(item, forEachSeriesCallback) {

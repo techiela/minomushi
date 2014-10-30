@@ -9,7 +9,6 @@ var gm = require('gm').subClass({
 });
 var mkdirp = require('mkdirp');
 
-var KIND = "android";
 var RESOLUTION_LIST = ["xhdpi", "hdpi", "mdpi"];
 var RATE_FOR_HDPI = 0.667;
 var RATE_FOR_MDPI = 0.5;
@@ -21,8 +20,8 @@ exports.create = function(args) {
 
     var self = this;
     var req = args.req;
-    // TODO util.format
-    var resizeDir = "/tmp/" + req.cookies.uniqId + "/" + KIND + "/resize/";
+    var resizeDir = util.format("/tmp/%s/%s/resize/", 
+      req.cookies.uniqId, path.basename(__filename));
 
     this.makeWorkDir = function() {
       if (!fs.existsSync(resizeDir)) {
