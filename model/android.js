@@ -8,6 +8,8 @@ var gm = require('gm').subClass({
   imageMagick: true
 });
 var mkdirp = require('mkdirp');
+var util = require("util");
+
 
 var RESOLUTION_LIST = ["xhdpi", "hdpi", "mdpi"];
 var RATE_FOR_HDPI = 0.667;
