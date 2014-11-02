@@ -4,18 +4,15 @@
 <head>
   <title>Minomushi : pretty image resizing for smartphone</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="/css/dropzone.css">
-  <style>
-    body {
-      padding-top: 60px;
-    }
-  </style>
+  <link rel="stylesheet" href="/css/minomushi.css">
   <script>
     function MinomushiController($scope, $http) {
 
       $scope.isDownloadLinkShow = false;
+      $scope.isClearLinkShow = false;
       $scope.send = function send() {};
 
       Dropzone.options.myAwesomeDropzone = {
@@ -45,10 +42,12 @@
         }
       }
 
-      $scope.download = function() {
-        $http.post("download", {}).success(function() {
-          console.log("download ok")
-        });
+      $scope.onClickDownload = function() {
+        $scope.isClearLinkShow = true;
+        $("html, body").animate({
+          scrollTop: $("#clearFromHere").offset().top
+        }, 1000);
+
       }
     }
   </script>
@@ -56,19 +55,18 @@
 
 <body>
   <div class="container" ng-controller="MinomushiController">
-    <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="navbar-inner">
-        <div class="pull-right">
-          <a href="/" class="brand">Minomushi</a>
-        </div>
-      </div>
+
+    <div class="jumbotron" style="background:url(./img/wood.jpg); background-repeat: repeat;">
+      <h1>Minomushi</h1>
+      <p>Minomushi is pretty image resizing tool for iPhone/Android.
+        <br />You'll get @*x, *dpi images great easily.</p>
     </div>
+
     <div class="page-header">
       <h1>1. Upload your images.</h1>
+      <h4>At the moment, your images are considered as @3x/xhdpi.</h4>
     </div>
-    <div class="row">
-      <form action="/upload" class="dropzone" id="my-awesome-dropzone"></form>
-    </div>
+    <form action="/upload" class="dropzone" id="my-awesome-dropzone"></form>
 
     <div id="downloadFromHere" ng-show="isDownloadLinkShow" style="display: none;">
       <div class="page-header">
@@ -88,26 +86,25 @@
         </div>
       </div>
 
-      <div id="delete" ng-show="isDeleteLinkShow" style="display: none;">
+      <div id="clearFromHere" ng-show="isClearLinkShow" style="display: none;">
         <div class="page-header">
-          <h1>3. Delete your images immediately?</h1>
+          <h1>3. Would you like to clear your uploaded images immediately?</h1>
         </div>
         <div class="row">
           <div class="hero-button text-center">
-            <a href="/delete" class="btn btn-large btn-success">
+            <a href="/delete" class="btn btn-large btn-success" ng-click="onClickDownload()">
               <i class="icon-arrow-down icon-white"></i>
               delete uploaded images
             </a>
           </div>
         </div>
-
       </div>
 
     </div>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="/js/jquery.md5.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="/js/angular.min.js"></script>
     <script src="/js/dropzone.js"></script>
     <script>
