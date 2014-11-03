@@ -9,9 +9,11 @@
   <link rel="stylesheet" href="/css/dropzone.css">
   <link rel="stylesheet" href="/css/minomushi.css">
   <script>
-    function MinomushiController($scope, $http) {
+    function MinomushiController($scope, $http, $timeout) {
 
-      $scope.isDownloadLinkShow = false;
+      $scope.isDownloadAreaShow = false;
+      $scope.isDownloadButtonShow = true;
+      $scope.isDownloadProgressShow = false;
       $scope.isClearLinkShow = false;
       $scope.send = function send() {};
 
@@ -30,7 +32,7 @@
               this.getQueuedFiles().length === 0) {
               // コールバックの中から$scopeにアクセスする
               $scope.$apply(function() {
-                $scope.isDownloadLinkShow = true;
+                $scope.isDownloadAreaShow = true;
               });
 
               // ダウンロードリンクまでスクロールする
@@ -42,12 +44,19 @@
         }
       }
 
-      $scope.onClickDownload = function() {
-        $scope.isClearLinkShow = true;
-        $("html, body").animate({
-          scrollTop: $("#clearFromHere").offset().top
-        }, 1000);
+      $scope.onClickDownload = function(kind) {
+        $scope.isDownloadButtonShow = false;
+        $scope.isDownloadProgressShow = true;
 
+        $timeout(function() {
+          $scope.isDownloadButtonShow = true;
+          $scope.isDownloadProgressShow = false;
+          $scope.isClearLinkShow = true;
+          $("html, body").animate({
+            scrollTop: $("#pageEnd").offset().top
+          }, 1000);
+        }, 8000);
+        location.href = "/download/" + kind;
       }
     }
   </script>
@@ -68,39 +77,48 @@
     </div>
     <form action="/upload" class="dropzone" id="my-awesome-dropzone"></form>
 
-    <div id="downloadFromHere" ng-show="isDownloadLinkShow" style="display: none;">
+    <div id="downloadFromHere" ng-show="isDownloadAreaShow" style="display: none;">
       <div class="page-header">
         <h1>2. Download from here.</h1>
       </div>
-      <div class="row">
+      <div class="row" id="downloadButton" ng-show="isDownloadButtonShow">
         <div class="hero-button text-center">
-          <a href="/download/iphone" class="btn btn-large btn-success">
+          <a class="btn btn-large btn-success" ng-click="onClickDownload('iphone')">
             <i class="icon-arrow-down icon-white"></i>
             download for iPhone
           </a>
           &nbsp;&nbsp;
-          <a href="/download/android" class="btn btn-large btn-success">
+          <a class="btn btn-large btn-success" ng-click="onClickDownload('android')">
             <i class="icon-arrow-down icon-white"></i>
             download for Android
           </a>
         </div>
       </div>
 
-      <div id="clearFromHere" ng-show="isClearLinkShow" style="display: none;">
-        <div class="page-header">
-          <h1>3. Would you like to clear your uploaded images immediately?</h1>
-        </div>
-        <div class="row">
-          <div class="hero-button text-center">
-            <a href="/delete" class="btn btn-large btn-success" ng-click="onClickDownload()">
-              <i class="icon-arrow-down icon-white"></i>
-              delete uploaded images
-            </a>
-          </div>
+      <div class="progress" ng-show="isDownloadProgressShow" style="display: none;">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+          <span class="sr-only">now downloading...</span>
         </div>
       </div>
-
     </div>
+
+    <div id="clearFromHere" ng-show="isClearLinkShow" style="display: none;">
+      <div class="page-header">
+        <h1>3. Would you like to clear your uploaded images immediately?</h1>
+        <h4>If you leave it, the images will be cleared within hours.</h4>
+      </div>
+      <div class="row">
+        <div class="hero-button text-center">
+          <a href="/delete" class="btn btn-large btn-success" ng-click="onClickDownload()">
+            <i class="icon-arrow-down icon-white"></i>
+            clear uploaded images
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="pageEnd"></div>
+
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="/js/jquery.md5.js"></script>
