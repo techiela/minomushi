@@ -4,62 +4,10 @@
 <head>
   <title>Minomushi : pretty image resizing for smartphone</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="/css/dropzone.css">
   <link rel="stylesheet" href="/css/minomushi.css">
-  <script>
-    function MinomushiController($scope, $http, $timeout) {
-
-      $scope.isDownloadAreaShow = false;
-      $scope.isDownloadButtonShow = true;
-      $scope.isDownloadProgressShow = false;
-      $scope.isClearLinkShow = false;
-      $scope.send = function send() {};
-
-      Dropzone.options.myAwesomeDropzone = {
-        maxFilesize: 1, //MB
-        thumbnailWidth: 100, //px
-        thumbnailHeight: 100, //px
-        dictCancelUpload: 'cancel',
-        init: function() {
-          this.on("maxfilesexceeded", function(file) {
-            alert("No more files please!");
-          });
-
-          this.on("complete", function(_file) {
-            if (this.getUploadingFiles().length === 0 &&
-              this.getQueuedFiles().length === 0) {
-              // コールバックの中から$scopeにアクセスする
-              $scope.$apply(function() {
-                $scope.isDownloadAreaShow = true;
-              });
-
-              // ダウンロードリンクまでスクロールする
-              $("html, body").animate({
-                scrollTop: $("#downloadFromHere").offset().top
-              }, 1000);
-            }
-          });
-        }
-      }
-
-      $scope.onClickDownload = function(kind) {
-        $scope.isDownloadButtonShow = false;
-        $scope.isDownloadProgressShow = true;
-
-        $timeout(function() {
-          $scope.isDownloadButtonShow = true;
-          $scope.isDownloadProgressShow = false;
-          $scope.isClearLinkShow = true;
-          $("html, body").animate({
-            scrollTop: $("#pageEnd").offset().top
-          }, 1000);
-        }, 8000);
-        location.href = "/download/" + kind;
-      }
-    }
-  </script>
 </head>
 
 <body>
@@ -109,7 +57,7 @@
       </div>
       <div class="row">
         <div class="hero-button text-center">
-          <a href="/delete" class="btn btn-large btn-success" ng-click="onClickDownload()">
+          <a class="btn btn-large btn-success" ng-click="onClickClear()">
             <i class="icon-arrow-down icon-white"></i>
             clear uploaded images
           </a>
@@ -119,21 +67,23 @@
 
     <div id="pageEnd"></div>
 
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/jquery.cookie.js"></script>
-    <script src="/js/jquery.md5.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="/js/angular.min.js"></script>
-    <script src="/js/dropzone.js"></script>
-    <script>
-      $(function() {
-        if (!$.cookie("uniqId")) {
-          var plainText = window.performance.now() + ":" + Math.random() * 1000000;
-          console.log(plainText);
-          $.cookie("uniqId", $.md5(plainText));
-        }
-      });
-    </script>
+  </div>
+  
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.cookie.js"></script>
+<script src="/js/jquery.md5.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/angular.min.js"></script>
+<script src="/js/dropzone.js"></script>
+<script src="/js/minomushiController.js"></script>
+<script>
+  $(function() {
+    if (!$.cookie("uniqId")) {
+      var plainText = window.performance.now() + ":" + Math.random() * 1000000;
+      console.log(plainText);
+      $.cookie("uniqId", $.md5(plainText));
+    }
+  });
+</script>
 </body>
-
 </html>

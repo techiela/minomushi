@@ -20,7 +20,8 @@ exports.create = function(args) {
 
     var self = this;
     var req = args.req;
-    var resizeDir = util.format("/tmp/%s/%s/resize/", req.cookies.uniqId, path.basename(__filename));
+    var resizeDir = util.format("/tmp/%s/%s/resize/", 
+      req.cookies.uniqId, path.basename(__filename).replace(/\.js/, ""));
 
     this.makeWorkDir = function() {
       if (!fs.existsSync(resizeDir)) {

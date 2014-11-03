@@ -7,12 +7,6 @@ exports.exec = function(req, res) {
     var self = this;
     var uniqId;
 
-    this.clean = function() {
-      rimraf.sync(this.getTargetPath(), function() {
-        console.log("clean tmp dir: " + this.getTargetPath());
-      });
-    }
-
     this.getTargetPath = function() {
       var targetPath = "/tmp/" + req.cookies.uniqId + "/";
       console.log("targetPath: " + targetPath);
@@ -44,7 +38,6 @@ exports.exec = function(req, res) {
     }
 
     this.run = function() {
-      // this.clean();
       this.makeWorkDir();
       this.saveFile();
 

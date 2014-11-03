@@ -53,7 +53,7 @@ exports.exec = function(req, res) {
         throw err;
       });
 
-console.log("resizeDir: " + strategy.getResizeDir());
+      console.log("resizeDir: " + strategy.getResizeDir());
       archive.pipe(output);
       archive.bulk([{
         expand: true,
