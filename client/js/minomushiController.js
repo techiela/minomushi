@@ -6,6 +6,10 @@ function MinomushiController($scope, $http, $timeout) {
   $scope.isClearLinkShow = false;
   $scope.send = function send() {};
 
+  alertify.set({
+    delay: 5000
+  });
+
   Dropzone.options.myAwesomeDropzone = {
     maxFilesize: 1, //MB
     thumbnailWidth: 100, //px
@@ -23,6 +27,8 @@ function MinomushiController($scope, $http, $timeout) {
           $scope.$apply(function() {
             $scope.isDownloadAreaShow = true;
           });
+          
+          alertify.log("upload completed successfully.");
 
           // ダウンロードリンクまでスクロールする
           $("html, body").animate({
@@ -49,9 +55,10 @@ function MinomushiController($scope, $http, $timeout) {
   }
 
   $scope.onClickClear = function() {
-    $http.post('/clear', {
-    }).success(function(data, status, headers, config) {
+    $http.post('/clear', {}).success(function(data, status, headers, config) {
+      alertify.log(data.message);
     }).error(function(data, status, headers, config) {
+      alertify.error("");
     });
   }
 }
