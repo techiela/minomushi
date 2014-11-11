@@ -43,7 +43,7 @@ exports.exec = function(req, res) {
 
       res.send({
         result: "ok",
-        message: "file saved successfully!"
+        message: "The images saved successfully!"
       });
     }
   }

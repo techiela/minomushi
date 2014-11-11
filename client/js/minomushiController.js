@@ -28,7 +28,7 @@ function MinomushiController($scope, $http, $timeout) {
             $scope.isDownloadAreaShow = true;
           });
           
-          alertify.log("upload completed successfully.");
+          alertify.log("upload completed successfully!");
 
           // ダウンロードリンクまでスクロールする
           $("html, body").animate({
@@ -56,9 +56,12 @@ function MinomushiController($scope, $http, $timeout) {
 
   $scope.onClickClear = function() {
     $http.post('/clear', {}).success(function(data, status, headers, config) {
-      alertify.log(data.message);
+      alertify.log("The images were deleted successfully!");
+      $(".dz-preview").fadeOut(1000, function() {
+        $(".dz-preview").remove();
+      });
     }).error(function(data, status, headers, config) {
-      alertify.error("");
+      alertify.error("Error occured. Try again once more, or leave it within hours.");
     });
   }
 }

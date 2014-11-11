@@ -27,7 +27,7 @@ exports.exec = function(req, res) {
     this.put = function() {
       res.send({
         result: "ok",
-        message: "file saved successfully!"
+        message: "The images were deleted successfully!"
       });
     }
 
