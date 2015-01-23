@@ -1,22 +1,17 @@
+# [Minomushi](http://minomushi.herokuapp.com/ "Minomushi")
 
-     ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
-    '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
-    |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
-    '  '--'\|  |' '-' ''  ''  '\ `-' | .'  /   |  ||  '--'  /|  `---.
-     `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'
-    ----------------------------------------------------------------- 
+[Try it from here](http://minomushi.herokuapp.com/ "Minomushi")
 
 
-Welcome to your Node.js project on Cloud9 IDE!
+----
+## what is Minomushi?
+Minomushi is pretty image resizing tool for iPhone/Android.
+You can get @\*x, \*dpi images great easily.
 
-This chat example showcases how to use `socket.io` with a static `express` server.
+> At the moment, your images are considered as @3x/xxhdpi.
 
-## Running the server
-
-1) Open `server.js` and start the app by clicking on the "Run" button in the top menu.
-
-2) Alternatively you can launch the app from the Terminal:
-
-    $ node server.js
-
-Once the server is running, open the project in the shape of 'https://projectname-c9-username.c9.io/'. As you enter your name, watch the Users list (on the left) update. Once you press Enter or Send, the message is shared with all connected clients.
+----
+## usage
+1. Upload your images by drag-and-drop.
+2. Click 'Download' button.
+3. Click 'Clear uploaded images' button if you want to clear the images immediately.

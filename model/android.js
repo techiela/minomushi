@@ -10,9 +10,9 @@ var gm = require('gm').subClass({
 var mkdirp = require('mkdirp');
 var util = require("util");
 
-var RESOLUTION_LIST = ["xhdpi", "hdpi", "mdpi"];
-var RATE_FOR_HDPI = 0.667;
-var RATE_FOR_MDPI = 0.5;
+var RESOLUTION_LIST = ["xxhdpi", "xhdpi", "hdpi"];
+var RATE_FOR_XHDPI = 0.667;
+var RATE_FOR_HDPI = 0.5;
 
 console.log("require success.");
 exports.create = function(args) {
@@ -40,14 +40,14 @@ exports.create = function(args) {
       gm(item).size(function(err, size) {
         console.log("width: " + size.width);
         console.log("height: " + size.height);
-        fs.createReadStream(item).pipe(fs.createWriteStream(resizeDir + "xhdpi/" + path.basename(item)));
-        console.log("save xhdpi");
-        gm(item).resize(size.width * RATE_FOR_HDPI, size.height * RATE_FOR_HDPI)
-          .write(resizeDir + "hdpi/" + path.basename(item), function() {
-            console.log("save hdpi");
-            gm(item).resize(size.width * RATE_FOR_MDPI, size.height * RATE_FOR_MDPI)
-              .write(resizeDir + "mdpi/" + path.basename(item), function() {
-                console.log("save mdpi");
+        fs.createReadStream(item).pipe(fs.createWriteStream(resizeDir + "xxhdpi/" + path.basename(item)));
+        console.log("save xxhdpi");
+        gm(item).resize(size.width * RATE_FOR_XHDPI, size.height * RATE_FOR_XHDPI)
+          .write(resizeDir + "xhdpi/" + path.basename(item), function() {
+            console.log("save xhdpi");
+            gm(item).resize(size.width * RATE_FOR_HDPI, size.height * RATE_FOR_HDPI)
+              .write(resizeDir + "hdpi/" + path.basename(item), function() {
+                console.log("save hdpi");
                 forEachSeriesCallback();
               });
           });
